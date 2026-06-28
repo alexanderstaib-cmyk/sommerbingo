@@ -397,8 +397,9 @@
     <span class="line2">Sommer</span>
     <span class="line3">Bingo</span>
   </div>
-  <p>Skriv inn fornavnet ditt for å starte!</p>
+  <p>Skriv inn fornavnet ditt og velg en 4-sifret PIN-kode for å starte!</p>
   <input type="text" id="name-input" placeholder="Fornavnet ditt" autocomplete="off" maxlength="30">
+  <input type="number" id="pin-input" placeholder="4-sifret PIN" autocomplete="off" maxlength="4" style="font-size:1.2rem;padding:14px 20px;border:2px solid var(--neon-pink);border-radius:12px;text-align:center;width:260px;outline:none;background:rgba(255,255,255,0.95);box-shadow:0 0 15px rgba(255,45,149,0.3);-moz-appearance:textfield">
   <button class="btn btn-pink" onclick="startGame()">Start!</button>
 </div>
 
@@ -633,11 +634,12 @@ async function saveProgress() {
   await db.from('players').update({ progress: data }).eq('id', playerId);
 }
 
-async function loadOrCreatePlayer(name) {
+async function loadOrCreatePlayer(name, pin) {
   const { data: existing } = await db
     .from('players')
     .select('*')
     .eq('name', name.toLowerCase().trim())
+    .eq('pin', pin)
     .maybeSingle();
 
   if (existing) {
@@ -647,12 +649,23 @@ async function loadOrCreatePlayer(name) {
     boardLayout = p.board || generateBoard();
     shownMilestones = new Set(p.shown_milestones || []);
   } else {
+    const { data: sameName } = await db
+      .from('players')
+      .select('id')
+      .eq('name', name.toLowerCase().trim())
+      .eq('pin', pin)
+      .maybeSingle();
+
+    if (sameName) {
+      throw new Error('Feil PIN for dette navnet. Prøv igjen.');
+    }
+
     boardLayout = generateBoard();
     completed = new Set();
     shownMilestones = new Set();
     const { data: created } = await db
       .from('players')
-      .insert({ name: name.toLowerCase().trim(), progress: { completed: [], board: boardLayout, shown_milestones: [] } })
+      .insert({ name: name.toLowerCase().trim(), pin: pin, progress: { completed: [], board: boardLayout, shown_milestones: [] } })
       .select()
       .single();
     playerId = created.id;
@@ -661,14 +674,23 @@ async function loadOrCreatePlayer(name) {
 
 async function startGame() {
   const input = document.getElementById('name-input');
+  const pinInput = document.getElementById('pin-input');
   const name = input.value.trim();
+  const pin = pinInput.value.trim();
+
   if (!name) { input.focus(); return; }
+  if (!pin || pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+    alert('PIN-koden må være nøyaktig 4 siffer.');
+    pinInput.focus();
+    return;
+  }
 
   playerName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
   try {
-    await loadOrCreatePlayer(playerName);
+    await loadOrCreatePlayer(playerName, pin);
     localStorage.setItem('sommerbingo_name', playerName);
+    localStorage.setItem('sommerbingo_pin', pin);
     document.getElementById('name-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
     document.getElementById('player-label').innerHTML = `<em>Spiller: ${playerName}</em>`;
@@ -681,6 +703,7 @@ async function startGame() {
 
 function changePlayer() {
   localStorage.removeItem('sommerbingo_name');
+  localStorage.removeItem('sommerbingo_pin');
   playerName = '';
   playerId = null;
   completed = new Set();
@@ -688,17 +711,20 @@ function changePlayer() {
   document.getElementById('game-screen').style.display = 'none';
   document.getElementById('name-screen').style.display = 'flex';
   document.getElementById('name-input').value = '';
+  document.getElementById('pin-input').value = '';
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
   const saved = localStorage.getItem('sommerbingo_name');
-  if (saved) {
+  const savedPin = localStorage.getItem('sommerbingo_pin');
+  if (saved && savedPin) {
     document.getElementById('name-input').value = saved;
+    document.getElementById('pin-input').value = savedPin;
     await startGame();
   }
 });
 
-document.getElementById('name-input').addEventListener('keydown', (e) => {
+document.getElementById('pin-input').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') startGame();
 });
 </script>
