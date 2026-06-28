@@ -606,6 +606,11 @@ function checkMilestone(pinkCount, yellowCount) {
     20: { emoji: '👑', title: 'ALLE GULE FULLFØRT!', text: `${playerName}, du er helt RÅ! 👑 Alle 20 ekstraoppgaver er fullført! Du har virkelig gått den ekstra milen denne sommeren!` }
   };
 
+  const pinkThresholds = [1, 4, 8, 12, 16];
+  const yellowThresholds = [1, 5, 10, 15, 20];
+  pinkThresholds.forEach(t => { if (pinkCount < t) shownMilestones.delete('pink_' + t); });
+  yellowThresholds.forEach(t => { if (yellowCount < t) shownMilestones.delete('yellow_' + t); });
+
   const pinkKey = 'pink_' + pinkCount;
   if (pinkMilestones[pinkCount] && !shownMilestones.has(pinkKey)) {
     shownMilestones.add(pinkKey);
