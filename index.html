@@ -663,11 +663,12 @@ async function loadOrCreatePlayer(name, pin) {
     boardLayout = generateBoard();
     completed = new Set();
     shownMilestones = new Set();
-    const { data: created } = await db
+    const { data: created, error: insertErr } = await db
       .from('players')
       .insert({ name: name.toLowerCase().trim(), pin: pin, progress: { completed: [], board: boardLayout, shown_milestones: [] } })
       .select()
       .single();
+    if (insertErr) throw new Error(insertErr.message);
     playerId = created.id;
   }
 }
