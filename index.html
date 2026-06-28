@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Jentenes Sommerbingo ⚽</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #F4C0D1;
+      --pink-dark: #9B2D5B;
+      --yellow: #FAC775;
+      --yellow-dark: #8B5E0F;
+      --green: #4CAF50;
+      --neon-pink: #FF2D95;
+      --neon-cyan: #00F0FF;
+      --bg-dark: #1A0530;
+      --bg-mid: #2A0845;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-dark);
+      min-height: 100vh;
+      min-height: 100dvh;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ===== HERO BANNER ===== */
+    .hero-banner {
+      width: 100%;
+      max-height: 50vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .hero-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      max-height: 50vh;
+      background: linear-gradient(180deg, #FF6B00 0%, #FF4500 20%, #E8308C 45%, #9B2DB0 65%, #3A1078 85%, #1A0530 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative palm silhouettes on placeholder */
+    .hero-placeholder::before,
+    .hero-placeholder::after {
+      content: '🌴';
+      position: absolute;
+      font-size: 4rem;
+      bottom: 10%;
+      opacity: 0.3;
+      filter: brightness(0.3);
+    }
+    .hero-placeholder::before { left: 5%; }
+    .hero-placeholder::after { right: 5%; }
+
+    .hero-title {
+      font-family: 'Poiret One', cursive;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1;
+      z-index: 1;
+    }
+
+    .hero-title .line1 {
+      font-size: clamp(1.5rem, 6vw, 3rem);
+      color: #FF80CB;
+      text-shadow: 0 0 15px rgba(255,45,149,0.8), 0 0 40px rgba(255,45,149,0.4);
+      letter-spacing: 8px;
+      display: block;
+    }
+
+    .hero-title .line2 {
+      font-size: clamp(3rem, 12vw, 6rem);
+      font-weight: 900;
+      background: linear-gradient(180deg, #FFD4E8 0%, #FF80CB 40%, #FF2D95 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(3px 3px 0px #8B1057);
+      letter-spacing: 4px;
+      display: block;
+    }
+
+    .hero-title .line3 {
+      font-size: clamp(2.5rem, 10vw, 5rem);
+      font-weight: 900;
+      background: linear-gradient(180deg, #FFD4E8 0%, #FF80CB 40%, #FF2D95 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(3px 3px 0px #8B1057);
+      letter-spacing: 4px;
+      display: block;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 10px 8px 24px;
+    }
+
+    /* ===== PLAYER + BADGES ROW ===== */
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding: 0 2px;
+    }
+
+    .badge {
+      font-size: 0.55rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 6px rgba(0,240,255,0.5);
+      writing-mode: horizontal-tb;
+      opacity: 0.7;
+    }
+
+    .player-label {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.1rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px rgba(0,240,255,0.5);
+      text-align: center;
+    }
+
+    /* ===== PROGRESS ===== */
+    .progress {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .progress-item {
+      flex: 1;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 8px 6px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .progress-pink {
+      background: rgba(255,45,149,0.15);
+      color: #FF80CB;
+      border: 2px solid rgba(255,45,149,0.5);
+      box-shadow: 0 0 12px rgba(255,45,149,0.15);
+    }
+
+    .progress-yellow {
+      background: rgba(250,199,117,0.12);
+      color: #FAC775;
+      border: 2px solid rgba(250,199,117,0.4);
+      box-shadow: 0 0 12px rgba(250,199,117,0.1);
+    }
+
+    /* ===== BINGO GRID ===== */
+    .bingo-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 3px;
+    }
+
+    .cell {
+      aspect-ratio: 1;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.5rem;
+      line-height: 1.15;
+      padding: 3px 2px 2px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      word-break: break-word;
+      transition: opacity 0.2s;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      overflow: hidden;
+    }
+
+    .cell-text {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .cell-icon {
+      font-size: 0.85rem;
+      margin-top: 1px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .cell-pink {
+      background: var(--pink);
+      color: var(--pink-dark);
+      border: 1.5px solid rgba(155,45,91,0.3);
+    }
+
+    .cell-yellow {
+      background: var(--yellow);
+      color: var(--yellow-dark);
+      border: 1.5px solid rgba(139,94,15,0.3);
+    }
+
+    .cell.done { opacity: 0.4; }
+
+    .cell.done::after {
+      content: '✓';
+      position: absolute;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #00E676;
+      text-shadow: 0 0 10px rgba(0,230,118,0.6), 0 2px 4px rgba(0,0,0,0.3);
+      z-index: 2;
+    }
+
+    /* ===== NAME SCREEN ===== */
+    #name-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      text-align: center;
+      gap: 20px;
+      padding: 20px;
+      background: linear-gradient(180deg, #FF6B00 0%, #E8308C 35%, #9B2DB0 60%, #1A0530 100%);
+    }
+
+    #name-screen .hero-title { margin-bottom: 10px; }
+
+    #name-screen p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.85);
+      max-width: 320px;
+    }
+
+    #name-input {
+      font-size: 1.2rem;
+      padding: 14px 20px;
+      border: 2px solid var(--neon-pink);
+      border-radius: 12px;
+      text-align: center;
+      width: 260px;
+      outline: none;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 0 15px rgba(255,45,149,0.3);
+    }
+
+    #name-input:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 25px rgba(0,240,255,0.4);
+    }
+
+    .btn {
+      font-size: 1.1rem;
+      padding: 14px 36px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.1s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:active { transform: scale(0.96); }
+
+    .btn-pink {
+      background: linear-gradient(135deg, #FF2D95, #FF6BB5);
+      color: white;
+      box-shadow: 0 0 20px rgba(255,45,149,0.4);
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, #00C853, #69F0AE);
+      color: #1a1a1a;
+      box-shadow: 0 0 15px rgba(0,200,83,0.3);
+    }
+
+    /* ===== MILESTONE ===== */
+    .milestone-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,5,48,0.8);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .milestone-overlay.show { display: flex; }
+
+    .milestone-box {
+      background: linear-gradient(145deg, #2A0845, #1A0530);
+      border: 2px solid rgba(255,45,149,0.4);
+      border-radius: 20px;
+      padding: 28px;
+      max-width: 340px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255,45,149,0.2), 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .milestone-box h2 {
+      color: #FF80CB;
+      margin-bottom: 12px;
+      font-size: 1.3rem;
+      font-family: 'Poiret One', cursive;
+      text-shadow: 0 0 10px rgba(255,45,149,0.5);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .milestone-box p {
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .milestone-box .emoji { font-size: 2.5rem; margin-bottom: 8px; }
+
+    .email-btn { display: none; margin-top: 10px; }
+    .email-btn.show { display: inline-block; }
+
+    /* ===== FOOTER ===== */
+    .change-player {
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .change-player button {
+      background: none;
+      border: none;
+      font-family: 'Pacifico', cursive;
+      color: var(--neon-cyan);
+      font-size: 0.9rem;
+      cursor: pointer;
+      opacity: 0.5;
+      text-shadow: 0 0 6px rgba(0,240,255,0.3);
+    }
+
+    .neon-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-pink), var(--neon-cyan), transparent);
+      margin: 6px 0;
+      box-shadow: 0 0 8px rgba(255,45,149,0.3);
+    }
+
+    @media (min-width: 400px) {
+      .cell { font-size: 0.58rem; padding: 3px; }
+      .cell-icon { font-size: 0.9rem; }
+    }
+
+    @media (min-width: 500px) {
+      .cell { font-size: 0.68rem; padding: 4px 3px 3px; }
+      .cell-icon { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="name-screen">
+  <div class="hero-title">
+    <span class="line1">Jentenes</span>
+    <span class="line2">Sommer</span>
+    <span class="line3">Bingo</span>
+  </div>
+  <p>Skriv inn fornavnet ditt for å starte!</p>
+  <input type="text" id="name-input" placeholder="Fornavnet ditt" autocomplete="off" maxlength="30">
+  <button class="btn btn-pink" onclick="startGame()">Start!</button>
+</div>
+
+<div id="game-screen" style="display:none">
+  <!-- Hero banner - replace src with your AI-generated image -->
+  <div class="hero-banner">
+    <img src="hero.png" alt="Jentenes Sommerbingo">
+  </div>
+
+  <div class="container">
+    <div class="info-row">
+      <span class="player-label" id="player-label">Spiller: Test</span>
+    </div>
+
+    <div class="progress">
+      <span class="progress-item progress-pink" id="pink-progress">Rosa fullført<br><strong>0/16</strong></span>
+      <span class="progress-item progress-yellow" id="yellow-progress">Gule fullført<br><strong>0/20</strong></span>
+    </div>
+
+    <div style="display:flex;gap:6px;margin-bottom:8px;font-size:0.7rem;opacity:0.85">
+      <div style="flex:1;background:rgba(244,192,209,0.15);border:1px solid rgba(244,192,209,0.3);border-radius:6px;padding:5px 8px;color:#FF80CB;text-align:center">🌸 Rosa oppgaver<br><span style="font-size:0.6rem;opacity:0.8">Grunnleggende – premie til alle som fullfører disse</span></div>
+      <div style="flex:1;background:rgba(250,199,117,0.12);border:1px solid rgba(250,199,117,0.3);border-radius:6px;padding:5px 8px;color:#FAC775;text-align:center">⭐ Gule oppgaver<br><span style="font-size:0.6rem;opacity:0.8">Ekstra utfordring</span></div>
+    </div>
+
+    <div class="bingo-grid" id="bingo-grid"></div>
+
+    <div class="neon-line" style="margin-top:10px"></div>
+
+    <div class="change-player">
+      <button onclick="changePlayer()">~ Bytt spiller ~</button>
+    </div>
+  </div>
+</div>
+
+<div class="milestone-overlay" id="milestone-overlay">
+  <div class="milestone-box">
+    <div class="emoji" id="milestone-emoji"></div>
+    <h2 id="milestone-title"></h2>
+    <p id="milestone-text"></p>
+    <button class="btn btn-pink" onclick="closeMilestone()">Lukk</button>
+    <br>
+    <a class="btn btn-green email-btn" id="email-btn">📧 Send e-post til trener</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://oneenmphkpcxpuaboywn.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uZWVubXBoa3BjeHB1YWJveXduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDE3NjUsImV4cCI6MjA5ODIxNzc2NX0.itIzRKQzml-8VXgPi8C-7h3iVZhsJ7En4xP7FsrKbIk';
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const PINK_TASKS = [
+  { text: 'Øv på å skyte en ball som ligger i ro. 15 min.', icon: '🥅' },
+  { text: 'Triks 3 ganger mer enn du vanligvis klarer.', icon: '🤹' },
+  { text: 'Ta 10 innkast, stå helt stille med beina.', icon: '🧍‍♀️' },
+  { text: 'Ta 10 innkast med litt løpefart.', icon: '🏃‍♀️' },
+  { text: 'Vipp ballen opp i hendene når den triller mot deg. 10 min.', icon: '🖐️' },
+  { text: 'Heade ballen mot vegg/kast. 10 min.', icon: '🤕' },
+  { text: 'Sov med ballen.', icon: '😴' },
+  { text: 'Lær deg en finte skikkelig godt, og test den.', icon: '⭐' },
+  { text: 'Ta med ballen på en gåtur. Ca en halvtime.', icon: '🚶‍♀️' },
+  { text: 'Se en VM-kamp.', icon: '📺' },
+  { text: 'Øv på å dempe ballen på brystet. 10 min.', icon: '💪' },
+  { text: 'Vipp ballen oppi en bøtte. 5 ganger.', icon: '🪣' },
+  { text: 'Lær deg Cruyff-vending.', icon: '🔄' },
+  { text: 'Få med en venn på å spille fotball.', icon: '👯‍♀️' },
+  { text: 'Øv på å skyte en ball som spretter. 15 min.', icon: '⚽' },
+  { text: 'Innsidepasning mot vegg, annethvert bein. 15 min.', icon: '🦶' }
+];
+
+const YELLOW_TASKS = [
+  { text: 'Kast ballen høyt og demp den i ro med foten. 10 min.', icon: '🦶' },
+  { text: 'Skyte ball i ro, annethvert bein. 15 min.', icon: '🥅' },
+  { text: 'Triks 5 ganger mer enn du vanligvis klarer.', icon: '🤹' },
+  { text: 'Lengre innkast stillestående. 20 ganger.', icon: '🧍‍♀️' },
+  { text: 'Lengre innkast med løpefart. 20 ganger.', icon: '🏃‍♀️' },
+  { text: 'Knebøy venstre bein, høyre strukket frem. 2x/uke.', icon: '🏋️‍♀️' },
+  { text: 'Vipp ballen opp i hendene med begge føtter. 10 ganger.', icon: '🖐️' },
+  { text: 'Knebøy høyre bein, venstre strukket frem. 2x/uke.', icon: '🏋️‍♀️' },
+  { text: 'Vipp ballen opp i hendene i ro. 10 ganger.', icon: '🖐️' },
+  { text: 'Lær deg finten til høyre og venstre.', icon: '↔️' },
+  { text: 'Ta med ballen på joggetur.', icon: '🏃‍♀️' },
+  { text: 'Vipp i bøtte med begge bein, øv svakeste. 10 min.', icon: '🪣' },
+  { text: 'Gjør 50 Cruyff-vendinger med høyre fot.', icon: '🔄' },
+  { text: 'Innsidepasning mot vegg, annethvert bein. 50 på rad.', icon: '🦶' },
+  { text: 'Gjør 50 Cruyff-vendinger med venstre fot.', icon: '🔄' },
+  { text: 'Planke på albuer, tell til 30 sakte.', icon: '💪' },
+  { text: 'Få med flere venner på å spille fotball.', icon: '👯‍♀️' },
+  { text: 'Skyte ball som spretter, begge bein. 10 min.', icon: '⚽' },
+  { text: 'Stå på høyre bein, venstre strakt frem. 2x/uke.', icon: '🧘‍♀️' },
+  { text: 'Stå på venstre bein, høyre strakt frem. 2x/uke.', icon: '🧘‍♀️' }
+];
+
+const TRAINER_EMAIL = 'Alexander.Staib@fd.dep.no';
+
+let playerName = '';
+let playerId = null;
+let completed = new Set();
+let boardLayout = null;
+let shownMilestones = new Set();
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getGridZones() {
+  const outer = [];
+  const inner = [];
+  for (let r = 0; r < 6; r++) {
+    for (let c = 0; c < 6; c++) {
+      const idx = r * 6 + c;
+      if (r >= 1 && r <= 4 && c >= 1 && c <= 4) inner.push(idx);
+      else outer.push(idx);
+    }
+  }
+  return { inner, outer };
+}
+
+function generateBoard() {
+  const { inner, outer } = getGridZones();
+  const pinkOrder = shuffle([...Array(16).keys()]);
+  const yellowOrder = shuffle([...Array(20).keys()]);
+  const board = new Array(36);
+  inner.forEach((pos, i) => { board[pos] = { type: 'pink', taskIndex: pinkOrder[i] }; });
+  outer.forEach((pos, i) => { board[pos] = { type: 'yellow', taskIndex: yellowOrder[i] }; });
+  return board;
+}
+
+function renderGrid() {
+  const grid = document.getElementById('bingo-grid');
+  grid.innerHTML = '';
+  boardLayout.forEach((cell, idx) => {
+    const btn = document.createElement('button');
+    const task = cell.type === 'pink' ? PINK_TASKS[cell.taskIndex] : YELLOW_TASKS[cell.taskIndex];
+    btn.className = `cell cell-${cell.type}${completed.has(idx) ? ' done' : ''}`;
+    btn.innerHTML = `<span class="cell-text">${task.text}</span><span class="cell-icon">${task.icon}</span>`;
+    btn.onclick = () => toggleCell(idx);
+    grid.appendChild(btn);
+  });
+  updateProgress();
+}
+
+function updateProgress() {
+  let pink = 0, yellow = 0;
+  completed.forEach(idx => {
+    if (boardLayout[idx].type === 'pink') pink++;
+    else yellow++;
+  });
+  document.getElementById('pink-progress').innerHTML = `Rosa fullført<br><strong>${pink}/16</strong>`;
+  document.getElementById('yellow-progress').innerHTML = `Gule fullført<br><strong>${yellow}/20</strong>`;
+  return { pink, yellow };
+}
+
+async function toggleCell(idx) {
+  if (completed.has(idx)) completed.delete(idx);
+  else completed.add(idx);
+
+  const cells = document.querySelectorAll('.cell');
+  cells[idx].classList.toggle('done');
+  const { pink, yellow } = updateProgress();
+
+  await saveProgress();
+  checkMilestone(pink, yellow);
+}
+
+function showMilestone(m, showEmail) {
+  document.getElementById('milestone-emoji').textContent = m.emoji;
+  document.getElementById('milestone-title').textContent = m.title;
+  document.getElementById('milestone-text').textContent = m.text;
+
+  const emailBtn = document.getElementById('email-btn');
+  if (showEmail) {
+    const subject = encodeURIComponent('Sommerbingo fullført! 🏆');
+    const body = encodeURIComponent(`Hei trener!\n\nJeg, ${playerName}, har fullført alle 16 rosa oppgaver i Jentenes Sommerbingo! ⚽🎉\n\nGleder meg til å vise hva jeg har lært på trening og i kamp!\n\nHilsen ${playerName}`);
+    emailBtn.href = `mailto:${TRAINER_EMAIL}?subject=${subject}&body=${body}`;
+    emailBtn.classList.add('show');
+  } else {
+    emailBtn.classList.remove('show');
+  }
+
+  document.getElementById('milestone-overlay').classList.add('show');
+}
+
+function checkMilestone(pinkCount, yellowCount) {
+  const pinkMilestones = {
+    1: { emoji: '⚽', title: 'Første rosa i mål!', text: `Bra jobba, ${playerName}! Du har fullført din første rosa oppgave. Fortsett sånn!` },
+    4: { emoji: '🌟', title: 'En fjerdedel rosa!', text: `Wow, ${playerName}! Du har allerede fullført 4 av 16 rosa oppgaver. Kjør på!` },
+    8: { emoji: '🔥', title: 'Halvveis rosa!', text: `Fantastisk, ${playerName}! Du er halvveis med de rosa oppgavene! Vi trenere gleder oss til å se hva du har lært, på trening og i kamp! 💪` },
+    12: { emoji: '🚀', title: 'Tre fjerdedeler rosa!', text: `Utrolig innsats, ${playerName}! Bare 4 rosa igjen! Du er nesten i mål!` },
+    16: { emoji: '🏆', title: 'ALLE ROSA FULLFØRT!', text: `${playerName}, du er en STJERNE! ⭐ Alle 16 rosa oppgaver er i boks! Vi trenere gleder oss til å se hva du har lært, på trening og i kamp! Send en e-post til treneren din for å fortelle at du er i mål!` }
+  };
+
+  const yellowMilestones = {
+    1: { emoji: '💛', title: 'Første gule i mål!', text: `Flott, ${playerName}! Du har tatt fatt på ekstraoppgavene! Imponerende!` },
+    5: { emoji: '⭐', title: 'Fem gule fullført!', text: `Herlig innsats, ${playerName}! 5 av 20 gule oppgaver er unnagjort. Du går for gull!` },
+    10: { emoji: '🌟', title: 'Halvveis gule!', text: `Wow, ${playerName}! Halvparten av de gule ekstraoppgavene er fullført! Du viser skikkelig dedikasjon!` },
+    15: { emoji: '🔥', title: 'Nesten alle gule!', text: `Utrolig, ${playerName}! Bare 5 gule igjen. Du er en maskin!` },
+    20: { emoji: '👑', title: 'ALLE GULE FULLFØRT!', text: `${playerName}, du er helt RÅ! 👑 Alle 20 ekstraoppgaver er fullført! Du har virkelig gått den ekstra milen denne sommeren!` }
+  };
+
+  const pinkKey = 'pink_' + pinkCount;
+  if (pinkMilestones[pinkCount] && !shownMilestones.has(pinkKey)) {
+    shownMilestones.add(pinkKey);
+    showMilestone(pinkMilestones[pinkCount], pinkCount === 16);
+    return;
+  }
+
+  const yellowKey = 'yellow_' + yellowCount;
+  if (yellowMilestones[yellowCount] && !shownMilestones.has(yellowKey)) {
+    shownMilestones.add(yellowKey);
+    showMilestone(yellowMilestones[yellowCount], false);
+  }
+}
+
+function closeMilestone() {
+  document.getElementById('milestone-overlay').classList.remove('show');
+}
+
+async function saveProgress() {
+  if (!playerId) return;
+  const data = {
+    completed: Array.from(completed),
+    board: boardLayout,
+    shown_milestones: Array.from(shownMilestones)
+  };
+  await db.from('players').update({ progress: data }).eq('id', playerId);
+}
+
+async function loadOrCreatePlayer(name) {
+  const { data: existing } = await db
+    .from('players')
+    .select('*')
+    .eq('name', name.toLowerCase().trim())
+    .maybeSingle();
+
+  if (existing) {
+    playerId = existing.id;
+    const p = existing.progress || {};
+    completed = new Set(p.completed || []);
+    boardLayout = p.board || generateBoard();
+    shownMilestones = new Set(p.shown_milestones || []);
+  } else {
+    boardLayout = generateBoard();
+    completed = new Set();
+    shownMilestones = new Set();
+    const { data: created } = await db
+      .from('players')
+      .insert({ name: name.toLowerCase().trim(), progress: { completed: [], board: boardLayout, shown_milestones: [] } })
+      .select()
+      .single();
+    playerId = created.id;
+  }
+}
+
+async function startGame() {
+  const input = document.getElementById('name-input');
+  const name = input.value.trim();
+  if (!name) { input.focus(); return; }
+
+  playerName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+  try {
+    await loadOrCreatePlayer(playerName);
+    localStorage.setItem('sommerbingo_name', playerName);
+    document.getElementById('name-screen').style.display = 'none';
+    document.getElementById('game-screen').style.display = 'block';
+    document.getElementById('player-label').innerHTML = `<em>Spiller: ${playerName}</em>`;
+    renderGrid();
+  } catch (err) {
+    alert('Feil ved tilkobling til databasen:\n' + err.message);
+    console.error(err);
+  }
+}
+
+function changePlayer() {
+  localStorage.removeItem('sommerbingo_name');
+  playerName = '';
+  playerId = null;
+  completed = new Set();
+  shownMilestones = new Set();
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('name-screen').style.display = 'flex';
+  document.getElementById('name-input').value = '';
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const saved = localStorage.getItem('sommerbingo_name');
+  if (saved) {
+    document.getElementById('name-input').value = saved;
+    await startGame();
+  }
+});
+
+document.getElementById('name-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') startGame();
+});
+</script>
+
+</body>
+</html>
